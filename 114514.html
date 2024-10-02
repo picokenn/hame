@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, content="width=device-width, initial-scale=1.0">
+    <title>简单放置游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #score {
+            font-size: 24px;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>简单放置游戏</h1>
+    <div id="score">分数: 0</div>
+    <button id="clickButton">点击我!</button>
+    <div>
+        <h2>购买自动生成器</h2>
+        <p>单价: <span id="generatorCost">10</span>分数</p>
+        
+        <label for="quantity">数量:</label>
+        <input type="number" id="quantity" value="1" min="1" />
+        
+        <button id="buyGeneratorButton">购买自动生成器</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let generatorCost = 10;
+        let generatorActive = false;
+
+        const scoreDisplay = document.getElementById('score');
+        const clickButton = document.getElementById('clickButton');
+        const buyGeneratorButton = document.getElementById('buyGeneratorButton');
+        const generatorCostDisplay = document.getElementById('generatorCost');
+        const quantityInput = document.getElementById('quantity');
+
+        // 点击按钮增加分数
+        clickButton.addEventListener('click', () => {
+            score++;
+            updateScoreDisplay();
+        });
+
+        // 购买自动生成器
+        buyGeneratorButton.addEventListener('click', () => {
+            const quantity = parseInt(quantityInput.value);
+            const totalCost = generatorCost * quantity;
+
+            if (score >= totalCost) {
+                score -= totalCost;
+                generatorActive = true;
+                generatorCost *= 2; // 提高下次购买成本
+                updateScoreDisplay();
+                updateGeneratorCostDisplay();
+                startGenerator();
+            } else {
+                alert('分数不足!');
+            }
+        });
+
+        // 更新分数显示
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = '分数: ' + score;
+        }
+
+        // 更新自动生成器的价格显示
+        function updateGeneratorCostDisplay() {
+            generatorCostDisplay.textContent = generatorCost;
+        }
+
+        // 启动自动生成器
+        function startGenerator() {
+            setInterval(() => {
+                if (generatorActive) {
+                    score++;
+                    updateScoreDisplay();
+                }
+            }, 1000); // 每秒增加1分数
+        }
+    </script>
+</body>
+</html>
